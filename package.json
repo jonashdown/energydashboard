@@ -1,0 +1,26 @@
+{
+  "name": "energydashboard",
+  "version": "1.0.0",
+  "description": "Energy Dashboard",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonashdown/energydashboard.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jonashdown/energydashboard/issues"
+  },
+  "homepage": "https://github.com/jonashdown/energydashboard#readme",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
