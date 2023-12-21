@@ -30,9 +30,8 @@ const prepareData = ({ data, postcode }) => {
   data.forEach(({ to, intensity, generationmix }) => {
     const date = new Date(to);
     const time = Math.round(date.getTime() / 1000);
-    console.log({ to, intensity, generationmix })
     result.push(
-      [{
+      {
         name: 'intensity',
         interval,
         value: intensity.forecast,
@@ -47,32 +46,28 @@ const prepareData = ({ data, postcode }) => {
           tags: ['type=generation', `postcode=${postcode}`, 'data-source=carbonintensity.generation'],
           time
         })
-      )]
+      )
     )
   });
   return result;
 };
 
 const sendToGrafana = async (data) => {
-  await Promise.all(
-    data.map(async (batch) => {
-      console.log(batch)
-      try {
-        const response = await fetch(process.env.GRAFANA_API, {
-          method: 'post',
-          body: JSON.stringify(batch),
-          headers: {
-            'Authorization': `Bearer ${process.env.GRAFANA_USER_ID}:${process.env.GRAFANA_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        })
-        // return response.statusText
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    })
-  );
+  try {
+    const response = await fetch(process.env.GRAFANA_API, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Authorization': `Bearer ${process.env.GRAFANA_USER_ID}:${process.env.GRAFANA_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(`Succesfull POST to ${process.env.GRAFANA_API}`, response.status, response.statusText);
+    return response.statusText
+  } catch (error) {
+    console.error(`Error response from ${process.env.GRAFANA_API}`, error);
+    throw error;
+  }
 }
 
 export const handler = async () => {
@@ -81,8 +76,7 @@ export const handler = async () => {
 
   const { data } = await getCarbonIntensityDataForpostcode(postcode);
   const carbonIntensity = prepareData(data);
-  await sendToGrafana(carbonIntensity);
-  return 'ok';
+  return await sendToGrafana(carbonIntensity);
 };
 
 functions.cloudEvent('carbonIntensityIngest', handler)
