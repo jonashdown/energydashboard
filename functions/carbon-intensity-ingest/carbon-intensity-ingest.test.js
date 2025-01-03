@@ -78,7 +78,7 @@ afterAll(() => {
 })
 describe('Carbon Intensity Ingest', () => {
 
-  describe('Calling the Carbon Intensity API', () => {
+  describe('Calling the Carbon Intensity API thing', () => {
     it('Calls the Carbon Intensity API correctly', async () => {
       await handler();
       expect(fetch).toBeCalledWith(`${process.env.CARBON_INTENSITY_API}/regional/intensity/${expectedDate}/pt24h/postcode/${process.env.POSTCODE}`);
